@@ -59,7 +59,6 @@ describe("Issue create", () => {
     cy.get('[data-testid="board-list:backlog"]')
       .contains("TEST_TITLE")
       .within(() => {
-        // Assert that correct avatar and type icon are visible
         cy.get('[data-testid="avatar:Pickle Rick"]').should("be.visible");
         cy.get('[data-testid="icon:story"]').should("be.visible");
       });
@@ -85,6 +84,7 @@ describe("Issue create", () => {
       cy.get('[data-testid="select-option:Highest"]').click();
       cy.get('button[type="submit"]').click().wait(2000);
     });
+
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
     cy.reload();
@@ -119,17 +119,15 @@ describe("Issue create", () => {
       cy.get(".ql-editor").should("have.text", randomDescription);
       cy.get('input[name="title"]').type(randomTitle);
       cy.get('input[name="title"]').should("have.value", randomTitle);
-      cy.get('[data-testid="select:type"]').click();
-      cy.get('[data-testid="select-option:Task"]')
-        .trigger("mouseover")
-        .trigger("click");
-      cy.get('[data-testid="icon:task"]').should("be.visible");
+      //The "Task" option is selected by default in the Issue Type, so it is not present in the dropdown menu.
+      cy.get('[data-testid="select:type"]').should("contain", "Task");
       cy.get('[data-testid="select:reporterId"]').click();
       cy.get('[data-testid="select-option:Baby Yoda"]').click();
       cy.get('[data-testid="form-field:priority"]').click();
       cy.get('[data-testid="select-option:Low"]').click();
       cy.get('button[type="submit"]').click().wait(6000);
     });
+
     cy.get('[data-testid="modal:issue-create"]').should("not.exist");
     cy.contains("Issue has been successfully created.").should("be.visible");
     cy.reload();
