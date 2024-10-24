@@ -78,7 +78,7 @@ describe("Issue create", () => {
       });
   });
 
-  it.only("Should create a bug and validate it successfully", () => {
+  it("Should create a bug and validate it successfully", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type("My bug description DP");
       cy.get(".ql-editor").should("have.text", "My bug description DP");
