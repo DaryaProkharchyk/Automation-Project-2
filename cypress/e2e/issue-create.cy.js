@@ -1,6 +1,4 @@
 import { faker } from "@faker-js/faker";
-const randomTitle = faker.lorem.word();
-const randomDescription = faker.lorem.words(3);
 
 describe("Issue create", () => {
   beforeEach(() => {
@@ -12,7 +10,7 @@ describe("Issue create", () => {
       });
   });
 
-  it("Should create an issue and validate it successfully", () => {
+  it("Should create a story and validate it successfully", () => {
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type("TEST_DESCRIPTION");
       cy.get(".ql-editor").should("have.text", "TEST_DESCRIPTION");
@@ -65,11 +63,14 @@ describe("Issue create", () => {
   });
 
   it("Should create a bug and validate it successfully", () => {
+    const title = "Bug";
+    const description = "My bug description";
+
     cy.get('[data-testid="modal:issue-create"]').within(() => {
-      cy.get(".ql-editor").type("My bug description DP");
-      cy.get(".ql-editor").should("have.text", "My bug description DP");
-      cy.get('input[name="title"]').type("Bug DP");
-      cy.get('input[name="title"]').should("have.value", "Bug DP");
+      cy.get(".ql-editor").type(description);
+      cy.get(".ql-editor").should("have.text", description);
+      cy.get('input[name="title"]').type(title);
+      cy.get('input[name="title"]').should("have.value", title);
       cy.get('[data-testid="select:type"]').click();
       cy.get('[data-testid="select-option:Bug"]')
         .wait(1000)
@@ -97,7 +98,7 @@ describe("Issue create", () => {
           .should("have.length", "5")
           .first()
           .find("p")
-          .contains("Bug DP")
+          .contains(title)
           .siblings()
           .within(() => {
             cy.get('[data-testid="avatar:Lord Gaben"]').should("be.visible");
@@ -106,7 +107,7 @@ describe("Issue create", () => {
       });
 
     cy.get('[data-testid="board-list:backlog"]')
-      .contains("Bug DP")
+      .contains(title)
       .within(() => {
         cy.get('[data-testid="avatar:Lord Gaben"]').should("be.visible");
         cy.get('[data-testid="icon:bug"]').should("be.visible");
@@ -114,6 +115,9 @@ describe("Issue create", () => {
   });
 
   it("Should create a task and validate it successfully", () => {
+    const randomTitle = faker.lorem.word();
+    const randomDescription = faker.lorem.words(3);
+
     cy.get('[data-testid="modal:issue-create"]').within(() => {
       cy.get(".ql-editor").type(randomDescription);
       cy.get(".ql-editor").should("have.text", randomDescription);
